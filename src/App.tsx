@@ -1,7 +1,7 @@
-import Quote from "./components/Quote";
+import Quotes from "./components/Quotes";
 
 function App() {
-  return <Quote />;
+  return <Quotes />;
 }
 
 export default App;
