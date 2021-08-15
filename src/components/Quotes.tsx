@@ -1,9 +1,13 @@
+import { Scheduler } from "async-scheduler";
 import { useCallback, useEffect, useState } from "react";
 import useInterval from "react-useinterval";
 import { IQuote } from "./Quote";
 
 const DELAY_MS = 5000; // ms
-const MAX_COUNT = 5;
+const MAX_COUNT = 10;
+const MAX_CONCURRENT_TASKS = 3;
+
+const scheduler = new Scheduler(MAX_CONCURRENT_TASKS);
 
 function Quotes() {
   const getRandomQuote = useCallback(async (): Promise<IQuote> => {
@@ -17,7 +21,7 @@ function Quotes() {
     async (count: number): Promise<IQuote[]> => {
       const promises = [];
       for (let i = 0; i < count; i++) {
-        promises.push(getRandomQuote());
+        promises.push(scheduler.enqueue(() => getRandomQuote()));
       }
       return Promise.all(promises);
     },
